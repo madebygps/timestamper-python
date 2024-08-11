@@ -8,6 +8,7 @@ import os
 from dotenv import load_dotenv
 from openai import OpenAI
 from openai import AzureOpenAI
+import time
 
 
 load_dotenv()
@@ -18,7 +19,8 @@ endpoint = os.getenv('ENDPOINT')
 
 client = AzureOpenAI(
     azure_endpoint=endpoint,
-    api_version='2023-03-15-preview'
+    api_version="2024-05-01-preview",
+    api_key=openai_api_key
 )
 
 #client = OpenAI(api_key=openai_api_key)
@@ -56,19 +58,21 @@ def get_captions(video_id):
     return [(t['text'], t['start']) for t in transcript.fetch()]
 
 
-def generate_chapter_title(chapter):
+
+def generate_chapter_title(chapter, max_retries=5):
     """
     Generates a chapter title for a segment of a YouTube video based on the given chapter content.
 
     Args:
         chapter (list): A list of tuples representing the content of the chapter. Each tuple contains
                         a text segment and its corresponding timestamp.
+        max_retries (int): Maximum number of retries for the API request.
 
     Returns:
         str: The generated chapter title.
 
     Raises:
-        None
+        Exception: If the maximum number of retries is exceeded.
     """
     chapter_content = ' '.join(text for text, _ in chapter)
     prompt = (
@@ -77,12 +81,27 @@ def generate_chapter_title(chapter):
         f"{chapter_content}. "
         "The title should be no more than 6 words and describe the segment concisely and accurately."
     )
-    response = client.chat.completions.create(dep,  # Specify GPT-4 model here
-    messages=[
-        {"role": "system", "content": "You are a helpful assistant."},
-        {"role": "user", "content": prompt}
-    ])
-    return response.choices[0].message.content
+
+    retries = 0
+    backoff_factor = 1
+
+    while retries < max_retries:
+        try:
+            completion = client.chat.completions.create(
+                model=deployment,  # Specify GPT-4 model here
+                messages=[
+                    {"role": "system", "content": "You are a helpful assistant."},
+                    {"role": "user", "content": prompt}
+                ]
+            )
+            return completion.model_dump_json(indent=2)
+        except client.error.RateLimitError:
+            retry_after = backoff_factor
+            time.sleep(retry_after)
+            retries += 1
+            backoff_factor *= 2
+
+    raise Exception("Max retries exceeded")
 
 
 def group_sentences(captions, group_size=7):
@@ -144,7 +163,6 @@ def split_into_chapters_by_topic(captions, threshold=0.5, min_sentences=5):
         chapters.append(current_chapter)
 
     return chapters
-
 
 def generate_chapter_titles(video_id):
     """
