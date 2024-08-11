@@ -3,3 +3,4 @@ youtube-transcript-api
 scikit-learn
 numpy
 argparse
+python-dotenv

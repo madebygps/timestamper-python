@@ -7,11 +7,21 @@ import numpy as np
 import os
 from dotenv import load_dotenv
 from openai import OpenAI
+from openai import AzureOpenAI
+
 
 load_dotenv()
 
 openai_api_key = os.getenv('OPENAI_API_KEY')
-client = OpenAI(api_key=openai_api_key)
+deployment = os.getenv('DEPLOYMENT_NAME')
+endpoint = os.getenv('ENDPOINT')
+
+client = AzureOpenAI(
+    azure_endpoint=endpoint,
+    api_version='2023-03-15-preview'
+)
+
+#client = OpenAI(api_key=openai_api_key)
 
 def format_timestamp(seconds):
     """
@@ -67,7 +77,7 @@ def generate_chapter_title(chapter):
         f"{chapter_content}. "
         "The title should be no more than 6 words and describe the segment concisely and accurately."
     )
-    response = client.chat.completions.create(model="gpt-3.5-turbo",  # Specify GPT-4 model here
+    response = client.chat.completions.create(dep,  # Specify GPT-4 model here
     messages=[
         {"role": "system", "content": "You are a helpful assistant."},
         {"role": "user", "content": prompt}
