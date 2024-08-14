@@ -6,7 +6,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 from dotenv import load_dotenv
 from openai import AzureOpenAI
-import time
+from rich.console import Console
+from rich.table import Table
 
 load_dotenv()
 
@@ -19,7 +20,6 @@ client = AzureOpenAI(
     api_version="2024-05-01-preview",
     api_key=openai_api_key
 )  
-
 
 def format_timestamp(seconds):
     """
@@ -85,7 +85,7 @@ def generate_chapter_title(chapter):
         print(f"An error occurred: {e}")
         raise
 
-def group_sentences(captions, group_size=20):
+def group_sentences(captions, num_chapters):
     """
     Groups the captions into sentences based on the specified group size.
 
@@ -97,13 +97,13 @@ def group_sentences(captions, group_size=20):
         list: A list of tuples containing the grouped caption text and start time.
     """
     grouped_captions = []
-    for i in range(0, len(captions), group_size):
-        grouped_text = ' '.join(text for text, _ in captions[i:i+group_size])
+    for i in range(0, len(captions), num_chapters):
+        grouped_text = ' '.join(text for text, _ in captions[i:i+num_chapters])
         start_time = captions[i][1]
         grouped_captions.append((grouped_text, start_time))
     return grouped_captions
 
-def split_into_chapters_by_topic(captions, threshold=0.285, group_size=20):
+def split_into_chapters_by_topic(captions):
     """
     Splits a list of captions into chapters based on topic similarity.
 
@@ -115,7 +115,10 @@ def split_into_chapters_by_topic(captions, threshold=0.285, group_size=20):
     Returns:
         list: A list of chapters, where each chapter is a list of captions.
     """
+    
+    group_size = 10
     grouped_captions = group_sentences(captions, group_size)
+    threshold=0.1
 
     vectorizer = TfidfVectorizer()
     texts = [text for text, _ in grouped_captions]
@@ -147,20 +150,24 @@ def generate_chapter_titles(video_id):
     captions = get_captions(video_id)
     chapters = split_into_chapters_by_topic(captions)
     print(f"Found {len(chapters)} chapters")
-
-    titles = []
+    
+    table = Table(title="Chapter Titles", show_header=False)
+    table.add_column("Timestamp", style="cyan") 
+    table.add_column("Title", style="magenta")  
+    
     for chapter in chapters:
         timestamp = format_timestamp(chapter[0][1])
         title = generate_chapter_title(chapter)
-        print(f"{timestamp}: {title}")
-        titles.append((timestamp, title))
+        table.add_row(timestamp, title)
+    
+    console = Console()
+    console.print(table)
    
-
 
 def main():
     parser = argparse.ArgumentParser(
         description='Generate YouTube chapter titles for a YouTube video')
-    parser.add_argument('video_id', type=str, help='The YouTube video ID')
+    parser.add_argument('--video_id', type=str, help='The YouTube video ID')
     args = parser.parse_args()
 
     generate_chapter_titles(args.video_id)
