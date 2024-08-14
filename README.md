@@ -19,7 +19,7 @@ Timestamper is a Python CLI tool that generates YouTube timestamps for a video b
     ENDPOINT=YOUR_ENDPOINT
     DEPLOYMENT_NAME=YOUR_DEPLOYMENT_NAME
     ```
-4. Run the script using `python timestamper.py {video_id}`
+4. Run the script using `python timestamper.py --video_id {video_id}`
 
 ## Contributing
 

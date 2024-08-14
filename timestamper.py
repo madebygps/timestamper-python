@@ -151,7 +151,7 @@ def generate_chapter_titles(video_id):
     chapters = split_into_chapters_by_topic(captions)
     print(f"Found {len(chapters)} chapters")
     
-    table = Table(title="Chapter Titles", show_header=False)
+    table = Table(title="", show_header=True, header_style="bold magenta")
     table.add_column("Timestamp", style="cyan") 
     table.add_column("Title", style="magenta")  
     
