@@ -4,3 +4,4 @@ scikit-learn
 numpy
 argparse
 python-dotenv
+rich
