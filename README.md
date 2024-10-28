@@ -37,7 +37,4 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 - [Azure OpenAI API](https://www.microsoft.com/en-us/azure/openai)
 - [Azure OpenAI On Your Data API Reference](https://learn.microsoft.com/en-us/azure/ai-services/openai/references/on-your-data?tabs=python)
-
 - [OpenAI Python API library](https://github.com/openai/openai-python/blob/main/README.md)
-
-https://www.youtube.com/live/qSpey7ef328
