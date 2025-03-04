@@ -1,0 +1,15 @@
+[project]
+name = "timestamper-python"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "argparse>=1.4.0",
+    "numpy>=2.2.3",
+    "openai>=1.65.2",
+    "python-dotenv>=1.0.1",
+    "rich>=13.9.4",
+    "scikit-learn>=1.6.1",
+    "youtube-transcript-api>=0.6.3",
+]

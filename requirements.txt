@@ -1,7 +1,0 @@
-openai
-youtube-transcript-api
-scikit-learn
-numpy
-argparse
-python-dotenv
-rich

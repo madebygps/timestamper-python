@@ -3,7 +3,6 @@ import argparse
 from youtube_transcript_api import YouTubeTranscriptApi
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-import numpy as np
 from dotenv import load_dotenv
 from openai import AzureOpenAI
 from rich.console import Console
