@@ -1,6 +1,6 @@
 import os
 import logging
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 from dotenv import load_dotenv
 from openai import AzureOpenAI
 
@@ -15,7 +15,15 @@ client = AzureOpenAI(
     api_key=openai_api_key
 )
 
-def generate_chapter_title(chapter: List[Tuple[str, float]]) -> str:
+def generate_chapter_title(chapter: List[Tuple[str, float]], model: Optional[str] = None) -> str:
+    """
+    Generate a chapter title for a segment of a YouTube video using OpenAI.
+    Args:
+        chapter: List of (text, timestamp) tuples for the chapter.
+        model: Optional model/deployment name to use.
+    Returns:
+        str: Generated chapter title.
+    """
     chapter_content = ' '.join(text for text, _ in chapter)
     prompt = (
         "I need a chapter title for a segment of a YouTube video. "
@@ -25,7 +33,7 @@ def generate_chapter_title(chapter: List[Tuple[str, float]]) -> str:
     )
     try:
         completion = client.chat.completions.create(
-            model=deployment,
+            model=model or deployment,
             messages=[
                 {"role": "system", "content": "You are a helpful assistant."},
                 {"role": "user", "content": prompt}
