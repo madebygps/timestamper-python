@@ -8,6 +8,7 @@ dependencies = [
     "argparse>=1.4.0",
     "numpy>=2.2.3",
     "openai>=1.65.2",
+    "pre-commit>=4.3.0",
     "python-dotenv>=1.0.1",
     "rich>=13.9.4",
     "scikit-learn>=1.6.1",

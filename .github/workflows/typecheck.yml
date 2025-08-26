@@ -21,4 +21,4 @@ jobs:
           pip install mypy
       - name: Run mypy type checking
         run: |
-          mypy timestamper-python/ 
+          mypy timestamper-python/

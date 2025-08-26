@@ -21,4 +21,4 @@ jobs:
           pip install ruff
       - name: Run ruff linter
         run: |
-          ruff timestamper-python/ 
+          ruff timestamper-python/

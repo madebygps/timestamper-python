@@ -2,7 +2,8 @@ import logging
 from youtube_transcript_api import YouTubeTranscriptApi
 from typing import List, Tuple
 
-def get_captions(video_id: str, language: str = 'en') -> List[Tuple[str, float]]:
+
+def get_captions(video_id: str, language: str = "en") -> List[Tuple[str, float]]:
     """
     Retrieves the captions and corresponding start times for a given YouTube video.
     Args:
@@ -14,7 +15,7 @@ def get_captions(video_id: str, language: str = 'en') -> List[Tuple[str, float]]
     try:
         transcript_list = YouTubeTranscriptApi.list_transcripts(video_id)
         transcript = transcript_list.find_transcript([language])
-        return [(t['text'], t['start']) for t in transcript.fetch()]
+        return [(t["text"], t["start"]) for t in transcript.fetch()]
     except Exception as e:
         logging.error(f"Error fetching captions: {e}")
-        return [] 
+        return []

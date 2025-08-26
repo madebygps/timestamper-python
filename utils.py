@@ -4,4 +4,4 @@ def format_timestamp(seconds: float) -> str:
     if hours > 0:
         return f"{hours:02d}:{minutes:02d}:{seconds:02d}"
     else:
-        return f"{minutes:02d}:{seconds:02d}" 
+        return f"{minutes:02d}:{seconds:02d}"

@@ -15,7 +15,7 @@ Timestamper is a Python CLI tool that generates YouTube timestamps for a video b
 2. Install the dependencies using `pip install -r requirements.txt`
 3. Set your environment variables in a `.env` file
     ```
-    OPENAI_API_KEY=YOUR_API_KEY  
+    OPENAI_API_KEY=YOUR_API_KEY
     ENDPOINT=YOUR_ENDPOINT
     DEPLOYMENT_NAME=YOUR_DEPLOYMENT_NAME
     ```

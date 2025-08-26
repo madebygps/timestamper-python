@@ -5,17 +5,18 @@ from dotenv import load_dotenv
 from openai import AzureOpenAI
 
 load_dotenv()
-openai_api_key = os.getenv('OPENAI_API_KEY')
-deployment = os.getenv('DEPLOYMENT_NAME')
-endpoint = os.getenv('ENDPOINT')
+openai_api_key = os.getenv("OPENAI_API_KEY")
+deployment = os.getenv("DEPLOYMENT_NAME")
+endpoint = os.getenv("ENDPOINT")
 
 client = AzureOpenAI(
-    azure_endpoint=endpoint,
-    api_version="2024-05-01-preview",
-    api_key=openai_api_key
+    azure_endpoint=endpoint, api_version="2024-05-01-preview", api_key=openai_api_key
 )
 
-def generate_chapter_title(chapter: List[Tuple[str, float]], model: Optional[str] = None) -> str:
+
+def generate_chapter_title(
+    chapter: List[Tuple[str, float]], model: Optional[str] = None
+) -> str:
     """
     Generate a chapter title for a segment of a YouTube video using OpenAI.
     Args:
@@ -24,7 +25,7 @@ def generate_chapter_title(chapter: List[Tuple[str, float]], model: Optional[str
     Returns:
         str: Generated chapter title.
     """
-    chapter_content = ' '.join(text for text, _ in chapter)
+    chapter_content = " ".join(text for text, _ in chapter)
     prompt = (
         "I need a chapter title for a segment of a YouTube video. "
         "This particular segment covers the following content: "
@@ -36,10 +37,10 @@ def generate_chapter_title(chapter: List[Tuple[str, float]], model: Optional[str
             model=model or deployment,
             messages=[
                 {"role": "system", "content": "You are a helpful assistant."},
-                {"role": "user", "content": prompt}
-            ]
+                {"role": "user", "content": prompt},
+            ],
         )
         return completion.choices[0].message.content
     except Exception as e:
         logging.error(f"Error generating chapter title: {e}")
-        return "Untitled Chapter" 
+        return "Untitled Chapter"

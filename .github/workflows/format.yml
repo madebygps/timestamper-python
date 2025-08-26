@@ -21,4 +21,4 @@ jobs:
           pip install black
       - name: Check code formatting
         run: |
-          black --check timestamper-python/ 
+          black --check timestamper-python/
